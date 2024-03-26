@@ -87,7 +87,7 @@ export const Header = () => {
             </div>
           ) : (
             <div className="hidden lg:flex">
-              <button className="btn btn-neutral mx-1">Login</button>
+              <button className="btn btn-neutral mx-2">Login</button>
               <button className="btn btn-primary">Sign up</button>
             </div>
           )}
