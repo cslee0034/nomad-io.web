@@ -87,8 +87,8 @@ export const Header = () => {
             </div>
           ) : (
             <div className="hidden lg:flex">
-              <button className="btn btn-sm btn-neutral mx-1">Login</button>
-              <button className="btn btn-sm  btn-primary">Sign up</button>
+              <button className="btn btn-neutral mx-1">Login</button>
+              <button className="btn btn-primary">Sign up</button>
             </div>
           )}
 
@@ -140,9 +140,9 @@ export const Header = () => {
                     <a className="text-xl justify-center">About</a>
                   </li>
                   <div className="my-4" />
-                  <button className="btn btn-sm btn-neutral">Login</button>
+                  <button className="btn btn-neutral">Login</button>
                   <div className="my-2" />
-                  <button className="btn btn-sm btn-primary">Sign up</button>
+                  <button className="btn btn-primary">Sign up</button>
                 </ul>
               </div>
             </div>
