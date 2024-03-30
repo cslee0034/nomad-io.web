@@ -36,7 +36,7 @@ export default function Sidebar({ isLoggedIn }: { isLoggedIn: boolean }) {
             <Link href="/login">Login</Link>
           </Button>
           <Button asChild className="mx-1">
-            <Link href="/login">Sign up</Link>
+            <Link href="/sign-up">Sign up</Link>
           </Button>
         </div>
       )}
@@ -71,10 +71,10 @@ export default function Sidebar({ isLoggedIn }: { isLoggedIn: boolean }) {
             {isLoggedIn ? (
               <>
                 <Button asChild className="bg-black">
-                  <Link href="/login">My Account</Link>
+                  <Link href="/my-account">My Account</Link>
                 </Button>
                 <Button asChild variant="outline">
-                  <Link href="/login">Logout</Link>
+                  <Link href="/logout">Logout</Link>
                 </Button>
               </>
             ) : (
@@ -83,7 +83,7 @@ export default function Sidebar({ isLoggedIn }: { isLoggedIn: boolean }) {
                   <Link href="/login">Login</Link>
                 </Button>
                 <Button asChild className="bg-black mx-1">
-                  <Link href="/login">Sign up</Link>
+                  <Link href="/sign-up">Sign up</Link>
                 </Button>
               </>
             )}
