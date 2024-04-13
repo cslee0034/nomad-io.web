@@ -1,6 +1,11 @@
 import Link from "next/link";
 import { CircleUser, Menu } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -49,42 +54,54 @@ export default function Sidebar({ isLoggedIn }: { isLoggedIn: boolean }) {
         </SheetTrigger>
         <SheetContent side="left">
           <nav className="grid gap-6 text-lg font-medium">
-            <Link
-              href="#"
-              className="text-muted-foreground hover:text-foreground"
-            >
-              Places
-            </Link>
-            <Link
-              href="#"
-              className="text-muted-foreground hover:text-foreground"
-            >
-              Feeds
-            </Link>
-            <Link
-              href="#"
-              className="text-muted-foreground hover:text-foreground"
-            >
-              About
-            </Link>
+            <SheetClose asChild>
+              <Link
+                href="#"
+                className="text-muted-foreground hover:text-foreground"
+              >
+                Places
+              </Link>
+            </SheetClose>
+            <SheetClose asChild>
+              <Link
+                href="#"
+                className="text-muted-foreground hover:text-foreground"
+              >
+                Feeds
+              </Link>
+            </SheetClose>
+            <SheetClose asChild>
+              <Link
+                href="#"
+                className="text-muted-foreground hover:text-foreground"
+              >
+                About
+              </Link>
+            </SheetClose>
             <div />
             {isLoggedIn ? (
               <>
-                <Button asChild className="bg-black">
-                  <Link href="/my-account">My Account</Link>
-                </Button>
+                <SheetClose asChild>
+                  <Button asChild className="bg-black">
+                    <Link href="/my-account">My Account</Link>
+                  </Button>
+                </SheetClose>
                 <Button asChild variant="outline">
                   <Link href="/logout">Logout</Link>
                 </Button>
               </>
             ) : (
               <>
-                <Button asChild variant="outline" className="mx-1">
-                  <Link href="/login">Login</Link>
-                </Button>
-                <Button asChild className="bg-black mx-1">
-                  <Link href="/sign-up">Sign up</Link>
-                </Button>
+                <SheetClose asChild>
+                  <Button asChild variant="outline" className="mx-1">
+                    <Link href="/login">Login</Link>
+                  </Button>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Button asChild className="bg-black mx-1">
+                    <Link href="/sign-up">Sign up</Link>
+                  </Button>
+                </SheetClose>
               </>
             )}
           </nav>
