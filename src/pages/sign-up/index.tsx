@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +14,16 @@ import { Label } from "@/components/ui/label";
 import AuthLayout from "../../components/auth-layout";
 
 export default function SignUpForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data: any) => {
+    console.log(data);
+  };
+
   return (
     <AuthLayout>
       <section>
@@ -24,15 +35,25 @@ export default function SignUpForm() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid gap-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
                   <Label htmlFor="first-name">First name</Label>
-                  <Input id="first-name" placeholder="chang su" required />
+                  <Input
+                    id="first-name"
+                    placeholder="Chang Su"
+                    required
+                    {...register("firstName")}
+                  />
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="last-name">Last name</Label>
-                  <Input id="last-name" placeholder="lee" required />
+                  <Input
+                    id="last-name"
+                    placeholder="Lee"
+                    required
+                    {...register("lastName")}
+                  />
                 </div>
               </div>
               <div className="grid gap-2">
@@ -42,19 +63,36 @@ export default function SignUpForm() {
                   type="email"
                   placeholder="nomad@example.com"
                   required
+                  {...register("email")}
                 />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" />
+                <Input
+                  id="password"
+                  type="password"
+                  required
+                  {...register("password", {
+                    maxLength: {
+                      value: 30,
+                      message: "Password must be no longer than 30 characters.",
+                    },
+                  })}
+                />
+                {errors.password &&
+                  typeof errors.password.message === "string" && (
+                    <p className="text-sm text-red-500">
+                      {errors.password.message}
+                    </p>
+                  )}
               </div>
               <Button type="submit" className="w-full">
                 Create an account
               </Button>
-            </div>
+            </form>
             <div className="mt-4 text-center text-sm">
-              Already have an account?
-              <Link href="#" className="underline">
+              Already have an account?&nbsp;
+              <Link href="/login" className="underline">
                 Sign in
               </Link>
             </div>
