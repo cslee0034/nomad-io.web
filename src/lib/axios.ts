@@ -1,28 +1,53 @@
 import Axios, { InternalAxiosRequestConfig } from "axios";
-
 import { API_URL } from "@/config";
 
-function authRequestInterceptor(config: InternalAxiosRequestConfig) {
-  const token = localStorage.getToken();
-  if (token) {
-    config.headers.authorization = `${token}`;
+const authRequestInterceptor = async (config: InternalAxiosRequestConfig) => {
+  try {
+    const response = await fetch("/api/auth/cookie");
+    const data = await response.json();
+    const accessToken = data.accessToken;
+
+    if (accessToken) {
+      config.headers = config.headers || {};
+      config.headers["x-access-token"] = accessToken;
+    }
+
+    return config;
+  } catch (error) {
+    throw new Error("Failed to get access token.");
   }
-  config.headers.Accept = "application/json";
-  return config;
-}
+};
+
+const refreshTokenInterceptor = async (error: any) => {
+  const originalRequest = error.config;
+
+  if (error.response?.status === 401 && !originalRequest._retry) {
+    originalRequest._retry = true;
+
+    const response = await fetch("/api/auth/refresh");
+    const data = await response.json();
+    const accessToken = data.accessToken;
+
+    if (accessToken) {
+      originalRequest.headers["x-access-token"] = accessToken.value;
+      return axios(originalRequest);
+    }
+  }
+
+  return Promise.reject(error);
+};
 
 export const axios = Axios.create({
   baseURL: API_URL,
 });
 
 axios.interceptors.request.use(authRequestInterceptor);
+axios.interceptors.response.use(undefined, refreshTokenInterceptor);
 axios.interceptors.response.use(
   (response) => {
     return response.data;
   },
   (error) => {
-    const message = error.response?.data?.message || error.message;
-
     return Promise.reject(error);
   }
 );
