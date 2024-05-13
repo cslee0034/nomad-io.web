@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
 import { API_URL } from "../../../config";
-import { cookieParser } from "../../../lib/utils";
+import { checkSuccessNextApi } from "../../../lib/utils";
+import { LoginResponse } from "../../../interfaces/login-response";
 
 export default async function handler(
   req: NextApiRequest,
@@ -21,21 +22,23 @@ export default async function handler(
       }
     );
 
+    checkSuccessNextApi(response);
+
     const setCookieHeader = response.headers["set-cookie"];
 
-    // 클라이언트 응답에 쿠키 설정
     if (setCookieHeader) {
       res.setHeader("Set-Cookie", setCookieHeader);
     }
 
-    // 클라이언트 응답에 쿠키 내용을 포함
-    const cookies = cookieParser(String(setCookieHeader));
-    const accessToken = cookies["x-access-token"] || "";
-
-    res.status(200).json({ accessToken });
+    res.status(200).json(response.data as LoginResponse);
 
     return;
   } catch (error: any) {
-    res.status(error?.response?.status || 500).json(error?.response?.data);
+    res.status(error?.response?.status || 500).json({
+      message:
+        error?.response?.data?.message || "Error occurred while logging in.",
+    });
+
+    return;
   }
 }
