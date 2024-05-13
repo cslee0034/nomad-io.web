@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { useForm } from "react-hook-form";
-
+import { SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,13 +10,30 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import AuthLayout from "../../components/auth-layout";
+import { Loader2 } from "lucide-react";
+import AuthLayout from "@/components/auth-layout";
+import { useLogin } from "@/hooks/useLogin";
+import { LoginRequest } from "@/interfaces/login-request";
+import { AlertModal } from "../../components/alert-modal";
+import { useState } from "react";
 
 export default function LoginForm() {
-  const { register, handleSubmit } = useForm();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const { register, handleSubmit } = useForm<LoginRequest>();
+  const { mutate, isPending } = useLogin();
+
+  const onSubmit: SubmitHandler<LoginRequest> = (data) => {
+    mutate(data, {
+      onSuccess: () => {
+        setIsModalOpen(false);
+      },
+      onError: (error) => {
+        setIsModalOpen(true);
+        setErrorMessage(error.message);
+      },
+    });
   };
 
   return (
@@ -59,9 +75,16 @@ export default function LoginForm() {
                   {...register("password")}
                 />
               </div>
-              <Button type="submit" className="w-full">
-                Login
-              </Button>
+              {isPending ? (
+                <Button disabled>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </Button>
+              ) : (
+                <Button type="submit" className="w-full">
+                  Login
+                </Button>
+              )}
               <Button type="button" variant="outline" className="w-full">
                 Login with Google
               </Button>
@@ -75,6 +98,11 @@ export default function LoginForm() {
           </CardContent>
         </Card>
       </section>
+      <AlertModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        message={errorMessage}
+      />
     </AuthLayout>
   );
 }
