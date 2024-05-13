@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -12,16 +12,33 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import AuthLayout from "../../components/auth-layout";
+import { useSignUp } from "../../hooks/useSignUp";
+import { useState } from "react";
+import { SignUpRequest } from "../../interfaces/signup-request";
+import { AlertModal } from "../../components/alert-modal";
 
 export default function SignUpForm() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<SignUpRequest>();
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const { mutate, isPending } = useSignUp();
+
+  const onSubmit: SubmitHandler<SignUpRequest> = (data) => {
+    mutate(data, {
+      onSuccess: () => {
+        setIsModalOpen(false);
+      },
+      onError: (error) => {
+        setIsModalOpen(true);
+        setErrorMessage(error.message);
+      },
+    });
   };
 
   return (
@@ -40,7 +57,7 @@ export default function SignUpForm() {
                 <div className="grid gap-2">
                   <Label htmlFor="first-name">First name</Label>
                   <Input
-                    id="first-name"
+                    id="firstName"
                     placeholder="Chang Su"
                     required
                     {...register("firstName")}
@@ -49,7 +66,7 @@ export default function SignUpForm() {
                 <div className="grid gap-2">
                   <Label htmlFor="last-name">Last name</Label>
                   <Input
-                    id="last-name"
+                    id="lastName"
                     placeholder="Lee"
                     required
                     {...register("lastName")}
@@ -93,12 +110,17 @@ export default function SignUpForm() {
             <div className="mt-4 text-center text-sm">
               Already have an account?&nbsp;
               <Link href="/login" className="underline">
-                Sign in
+                Login
               </Link>
             </div>
           </CardContent>
         </Card>
       </section>
+      <AlertModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        message={errorMessage}
+      />
     </AuthLayout>
   );
 }
