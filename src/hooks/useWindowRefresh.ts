@@ -44,6 +44,7 @@ export const useWindowRefresh = () => {
           firstName: response.firstName,
           lastName: response.lastName,
         });
+        console.log("hello");
       } catch (error) {
         console.error("Error refreshing auth token:", error);
       }
