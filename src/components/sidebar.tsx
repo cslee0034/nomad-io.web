@@ -15,12 +15,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useUserStore } from "../stores/useUserStore";
 
 export default function Sidebar({ isLoggedIn }: { isLoggedIn: boolean }) {
+  const userIfo = useUserStore((state) => state.userInfo);
+
   return (
     <div>
       {isLoggedIn ? (
-        <div className="hidden md:flex">
+        <div className="hidden md:flex align-middle">
+          <p className="flex items-center justify-center mx-2">
+            {userIfo?.firstName}
+          </p>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">
