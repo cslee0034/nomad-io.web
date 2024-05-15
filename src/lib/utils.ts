@@ -26,3 +26,10 @@ export function checkSuccessNextApi(response: AxiosResponse) {
     throw new Error(error?.message || "An error occurred during login");
   }
 }
+
+export function convertNullToEmptyString(value: string | null) {
+  if (!value || value === "null") {
+    return "";
+  }
+  return value;
+}
