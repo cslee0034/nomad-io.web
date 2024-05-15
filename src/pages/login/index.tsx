@@ -16,6 +16,7 @@ import { useLogin } from "@/hooks/useLogin";
 import { LoginRequest } from "@/interfaces/login-request";
 import { AlertModal } from "../../components/alert-modal";
 import { useState } from "react";
+import { API_URL } from "../../config";
 
 export default function LoginForm() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,6 +35,10 @@ export default function LoginForm() {
         setErrorMessage(error.message);
       },
     });
+  };
+
+  const googleOauth = () => {
+    window.location.href = `${API_URL}/auth/google/login`;
   };
 
   return (
@@ -85,7 +90,12 @@ export default function LoginForm() {
                   Login
                 </Button>
               )}
-              <Button type="button" variant="outline" className="w-full">
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                onClick={googleOauth}
+              >
                 Login with Google
               </Button>
             </form>
