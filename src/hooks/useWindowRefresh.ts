@@ -44,8 +44,8 @@ export const useWindowRefresh = () => {
           firstName: response.firstName,
           lastName: response.lastName,
         });
-        console.log("hello");
       } catch (error) {
+        localStorage.removeItem("expireDate");
         console.error("Error refreshing auth token:", error);
       }
     };
