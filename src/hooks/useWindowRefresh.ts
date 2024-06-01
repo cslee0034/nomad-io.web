@@ -46,7 +46,6 @@ export const useWindowRefresh = () => {
         });
       } catch (error) {
         localStorage.removeItem("expireDate");
-        console.error("Error refreshing auth token:", error);
       }
     };
 
